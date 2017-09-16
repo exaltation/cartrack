@@ -36,7 +36,7 @@ def get_training_model():
     Training model acts on a batch of 128x64 windows and outputs a
     1 + 8 * len(CHARS) vector
     """
-    img_input = Input(shape=(None, None, 1))
+    img_input = Input(shape=(64, 128, 1))
     x = convolutional_layers(img_input)
     x = Flatten()(x)
     x = Dense(2048, activation='relu', name='fc_1')(x)
