@@ -9,7 +9,7 @@ weights_file = 'model_weights.h5'
 batch_size = 50
 
 steps_per_epoch = 300
-num_epochs = 300
+num_epochs = 1000
 validation_steps = 20
 
 def code_to_vec(code):
@@ -37,21 +37,6 @@ def read_batches(batch_size):
 
     while True:
         yield unzip(gen_vecs())
-
-# def data_generator():
-#     g = generate_ims()
-#     while True:
-#         _inputs = []
-#         _targets = []
-#
-#         for i in xrange(batch_size):
-#             inputs, code, p =
-#             targets = code_to_vec(p, code)
-#
-#             _inputs.append(inputs)
-#             _targets.append(targets)
-#
-#         yield np.array(_inputs), np.array(_targets)
 
 training_model = models.get_training_model()
 training_model.compile(
