@@ -1,6 +1,7 @@
 from keras.models import Model
 from keras.layers import Input
 from keras.layers import Dense
+from keras.layers import Flatten
 from keras.layers import Conv2D
 from keras.layers import MaxPooling2D
 from keras.layers import Activation
@@ -37,7 +38,8 @@ def get_training_model():
     """
     img_input = Input(shape=(None, None, 1))
     x = convolutional_layers(img_input)
-    x = Dense(2048, activation='relu', name='fc_1', input_shape=(8, 32, 128))(x)
+    x = Flatten()(x)
+    x = Dense(2048, activation='relu', name='fc_1')(x)
     presence_idicator = Dense(1, activation='sigmoid', name='presence_idicator')(x)
     encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(x)
 
