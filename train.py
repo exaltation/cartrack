@@ -14,8 +14,8 @@ from keras.models import load_model
 trained_model = models.get_training_model()
 detect_model = models.get_detect_model(123)
 
-fc_1 = trained_model.get_layer('fc_1')
-conv_fc_1 = detect_model.get_layer('conv_fc_1')
+fc_1 = trained_model.get_layer('fc_1').get_weights()
+conv_fc_1 = detect_model.get_layer('conv_fc_1').get_weights()
 
 print(fc_1[0].shape)
 print(conv_fc_1[0].shape)
