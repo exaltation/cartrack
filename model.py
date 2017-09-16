@@ -43,18 +43,20 @@ def get_training_model():
 
     return Model(inputs=img_input, outputs=[presence_idicator, encoded_chars])
 
-def get_detect_model():
+def get_detect_model(trained_weights):
     """
     The same as training model, except it acts on arbitary sized image and
     slides the 128x64 window across the image in 8x8 strides
     """
     img_input = Input(shape=(None, None, 1))
     x = convolutional_layers(img_input)
-    x = Conv2D(2048, (8, 32), padding="same", strides=(8, 8), activation='relu', name='fc_1')(x)
-    presence_idicator = Conv2D(1, (1, 1), activation='sigmoid', name='presence_idicator')(x)
-    encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='encoded_chars')(x)
+    x = Conv2D(2048, (8, 32), padding="same", strides=(8, 8), activation='relu', name='conv_fc_1')(x)
+    presence_idicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_idicator')(x)
+    encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(x)
 
-    return Model(inputs=img_input, outputs=[presence_idicator, encoded_chars])
+    model = Model(inputs=img_input, outputs=[presence_idicator, encoded_chars])
+
+    return model
 
 if __name__ == '__main__':
     training_model = get_training_model()

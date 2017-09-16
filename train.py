@@ -1,12 +1,12 @@
 import model as models
 import common
+from keras.models import load_model
 
-weights_file = 'sample_weights.hd5'
+trained_model_file = 'model.h5'
 
-model = models.get_training_model()
-model.save_weights(weights_file)
+models.get_training_model.save(trained_model_file)
 
-detect_model = models.get_detect_model()
-detect_model.load_weights(weights_file, by_name=True)
+trained_model = load_model(trained_model_file)
 
+detect_model = models.get_detect_model(trained_model.get_weights())
 detect_model.summary()
