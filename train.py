@@ -2,24 +2,15 @@ import model as models
 import common
 from keras.models import load_model
 
-def trainprint(s):
-    with open('train.txt','w+') as f:
-        print(s, file=f)
-
-def detectprint(s):
-    with open('detect.txt','w+') as f:
-        print(s, file=f)
-
-
 trained_model_file = 'model.h5'
 
-models.get_training_model().save(trained_model_file)
-
-trained_model = load_model(trained_model_file)
-trained_model.summary(print_fn=trainprint)
+trained_model = models.get_training_model()
+with open('train.txt','w') as f:
+    trained_model.summary(print_fn=lambda x: f.write(x + '\n'))
 
 detect_model = models.get_detect_model(trained_model.get_weights())
-detect_model.summary(print_fn=detectprint)
+with open('detect.txt','w') as f:
+    detect_model.summary(print_fn=lambda x: f.write(x + '\n'))
 
 # trained_model = models.get_training_model()
 # detect_model = models.get_detect_model(123)
