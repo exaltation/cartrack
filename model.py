@@ -35,7 +35,7 @@ def get_training_model():
     Training model acts on a batch of 128x64 windows and outputs a
     1 + 8 * len(CHARS) vector
     """
-    img_input = Input(shape=(None, None, 1))
+    img_input = Input(shape=(64, 128, 1))
     x = convolutional_layers(img_input)
     x = Dense(2048, activation='relu', name='fc_1')(x)
     presence_idicator = Dense(1, activation='sigmoid', name='presence_idicator')(x)
@@ -48,7 +48,7 @@ def get_detect_model(trained_weights):
     The same as training model, except it acts on arbitary sized image and
     slides the 128x64 window across the image in 8x8 strides
     """
-    img_input = Input(shape=(64, 128, 1))
+    img_input = Input(shape=(None, None, 1))
     x = convolutional_layers(img_input)
     x = Conv2D(2048, (8, 32), padding="same", strides=(8, 8), activation='relu', name='conv_fc_1')(x)
     presence_idicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_idicator')(x)
