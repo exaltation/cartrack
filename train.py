@@ -66,5 +66,5 @@ training_model.fit_generator(read_batches(batch_size),
     validation_data=read_batches(batch_size),
     validation_steps=validation_steps,
     callbacks=[
-        ModelCheckpoint(weights_file, save_best_only=True)
+        ModelCheckpoint(weights_file, save_best_only=True, monitor='encoded_chars_loss')
     ])
