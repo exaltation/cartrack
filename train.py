@@ -49,4 +49,4 @@ training_model.fit_generator(data_generator,
     validation_steps=validation_steps,
     callbacks=[
         ModelCheckpoint(weights_file, save_best_only=True)
-    ]))
+    ])
