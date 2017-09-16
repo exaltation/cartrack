@@ -7,7 +7,6 @@ from keras.layers import Activation
 from keras.layers import BatchNormalization
 
 import common
-# from keras.layers import Dropout
 
 def convolutional_layers(img_input):
     # 1 layer
