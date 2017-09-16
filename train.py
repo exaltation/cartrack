@@ -1,4 +1,4 @@
-import models
+import model as models
 import common
 
 weights_file = 'sample_weights.hd5'
