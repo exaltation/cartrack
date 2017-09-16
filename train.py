@@ -14,18 +14,18 @@ validation_steps = 20
 
 def code_to_vec(p, code):
     def char_to_vec(c):
-        y = numpy.zeros((len(common.CHARS),))
+        y = np.zeros((len(common.CHARS),))
         y[common.CHARS.index(c)] = 1.0
         return y
 
-    c = numpy.vstack([char_to_vec(c) for c in code])
+    c = np.vstack([char_to_vec(c) for c in code])
 
-    return numpy.concatenate([(1. if p else 0), c.flatten()])
+    return np.concatenate([(1. if p else 0), c.flatten()])
 
 def unzip(b):
     xs, ys = zip(*b)
-    xs = numpy.array(xs)
-    ys = numpy.array(ys)
+    xs = np.array(xs)
+    ys = np.array(ys)
     return xs, ys
 
 def read_batches(batch_size):
