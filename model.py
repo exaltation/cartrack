@@ -35,9 +35,9 @@ def get_training_model():
     Training model acts on a batch of 128x64 windows and outputs a
     1 + 8 * len(CHARS) vector
     """
-    img_input = Input(shape=(64, 128, 1))
+    img_input = Input(shape=(None, None, 1))
     x = convolutional_layers(img_input)
-    x = Dense(2048, activation='relu', name='fc_1')(x)
+    x = Dense(2048, activation='relu', name='fc_1', input_shape=(8, 32, 128))(x)
     presence_idicator = Dense(1, activation='sigmoid', name='presence_idicator')(x)
     encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(x)
 
