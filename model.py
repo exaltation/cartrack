@@ -32,7 +32,6 @@ def convolutional_layers(img_input):
     x = Conv2D(256, (3, 3), padding='same', name='conv_4')(x)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
 
     return x
 
