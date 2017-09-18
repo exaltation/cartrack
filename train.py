@@ -6,10 +6,10 @@ import numpy as np
 import itertools
 
 weights_file = 'model_weights.h5'
-batch_size = 50
+batch_size = 64
 
-steps_per_epoch = 300
-num_epochs = 1000
+steps_per_epoch = 500
+num_epochs = 5000
 validation_steps = 20
 
 def code_to_vec(code):
@@ -27,7 +27,7 @@ def unzip(b):
     xs = np.array(xs)
     y1s = np.array(y1s)
     y2s = np.array(y2s)
-    return xs, {'presence_idicator':y1s, 'encoded_chars':y2s}
+    return xs, {'presence_indicator':y1s, 'encoded_chars':y2s}
 
 def read_batches(batch_size):
     g = generate_ims()
@@ -40,9 +40,9 @@ def read_batches(batch_size):
 
 training_model = models.get_training_model()
 training_model.compile(
-    loss={'presence_idicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
-    optimizer='adam',
-    metrics={'presence_idicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
+    loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
+    optimizer='rmsprop',
+    metrics={'presence_indicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
 
 print('\nStarting training...\n')
 training_model.fit_generator(read_batches(batch_size),
@@ -51,5 +51,5 @@ training_model.fit_generator(read_batches(batch_size),
     validation_data=read_batches(batch_size),
     validation_steps=validation_steps,
     callbacks=[
-        ModelCheckpoint(weights_file, save_best_only=True, monitor='encoded_chars_loss')
+        ModelCheckpoint(weights_file, save_best_only=True, monitor='val_loss')
     ])

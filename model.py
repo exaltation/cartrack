@@ -40,10 +40,10 @@ def get_training_model():
     x = convolutional_layers(img_input)
     x = Flatten()(x)
     x = Dense(2048, activation='relu', name='fc_1')(x)
-    presence_idicator = Dense(1, activation='sigmoid', name='presence_idicator')(x)
+    presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
     encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(x)
 
-    return Model(inputs=img_input, outputs=[presence_idicator, encoded_chars])
+    return Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
 
 def get_detect_model(trained_weights):
     """
@@ -53,10 +53,10 @@ def get_detect_model(trained_weights):
     img_input = Input(shape=(None, None, 1))
     x = convolutional_layers(img_input)
     x = Conv2D(2048, (8, 32), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_1')(x)
-    presence_idicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_idicator')(x)
+    presence_indicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_indicator')(x)
     encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(x)
 
-    model = Model(inputs=img_input, outputs=[presence_idicator, encoded_chars])
+    model = Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
 
     return model
 
