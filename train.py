@@ -41,7 +41,7 @@ def read_batches(batch_size):
 training_model = models.get_training_model()
 training_model.compile(
     loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
-    optimizer='nadam',
+    optimizer='adam',
     metrics={'presence_indicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
 
 print('\nStarting training...\n')
