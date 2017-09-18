@@ -54,6 +54,7 @@ def get_detect_model(trained_weights):
     """
     The same as training model, except it acts on arbitary sized image and
     slides the 128x64 window across the image in 8x8 strides
+    TODO: load trained weights
     """
     img_input = Input(shape=(None, None, 1))
     x = convolutional_layers(img_input)

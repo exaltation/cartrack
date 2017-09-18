@@ -1,8 +1,8 @@
-from keras.models import Model
-from keras.layers import Input
-from keras.layers import Dense
+import model as models
 
-img_input = Input(shape=(8, 32, 128))
+def print_to(model, txtfile):
+    with open(txtfile,'w') as fh:
+        model.summary(print_fn=lambda x: fh.write(x + '\n'))
 
-x = Dense(2048, name='fc1')(img_input)
-m = Model(inputs=img_input, outputs=x)
+print_to(models.get_training_model(), 'training_model.txt')
+print_to(models.get_detect_model(), 'detect_model.txt')
