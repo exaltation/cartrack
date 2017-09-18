@@ -1,3 +1,7 @@
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
 import model as models
 import common
 from keras.callbacks import ModelCheckpoint
@@ -6,9 +10,9 @@ import numpy as np
 import itertools
 
 weights_file = 'model_weights.h5'
-batch_size = 64
+batch_size = 128
 
-steps_per_epoch = 500
+steps_per_epoch = 200
 num_epochs = 5000
 validation_steps = 20
 
@@ -51,5 +55,5 @@ training_model.fit_generator(read_batches(batch_size),
     validation_data=read_batches(batch_size),
     validation_steps=validation_steps,
     callbacks=[
-        ModelCheckpoint(weights_file, save_best_only=True, monitor='val_loss')
+        ModelCheckpoint(weights_file)
     ])

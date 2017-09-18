@@ -3,43 +3,43 @@ Layer (type)                     Output Shape          Param #     Connected to
 ====================================================================================================
 input_2 (InputLayer)             (None, None, None, 1) 0                                            
 ____________________________________________________________________________________________________
-conv_1 (Conv2D)                  (None, None, None, 48 480         input_2[0][0]                    
+block1_conv1 (Conv2D)            (None, None, None, 64 640         input_2[0][0]                    
 ____________________________________________________________________________________________________
-batch_normalization_5 (BatchNorm (None, None, None, 48 192         conv_1[0][0]                     
+block1_conv2 (Conv2D)            (None, None, None, 64 36928       block1_conv1[0][0]               
 ____________________________________________________________________________________________________
-activation_5 (Activation)        (None, None, None, 48 0           batch_normalization_5[0][0]      
+block1_pool (MaxPooling2D)       (None, None, None, 64 0           block1_conv2[0][0]               
 ____________________________________________________________________________________________________
-max_pooling2d_4 (MaxPooling2D)   (None, None, None, 48 0           activation_5[0][0]               
+block2_conv1 (Conv2D)            (None, None, None, 12 73856       block1_pool[0][0]                
 ____________________________________________________________________________________________________
-conv_2 (Conv2D)                  (None, None, None, 64 27712       max_pooling2d_4[0][0]            
+block2_conv2 (Conv2D)            (None, None, None, 12 147584      block2_conv1[0][0]               
 ____________________________________________________________________________________________________
-batch_normalization_6 (BatchNorm (None, None, None, 64 256         conv_2[0][0]                     
+block2_pool (MaxPooling2D)       (None, None, None, 12 0           block2_conv2[0][0]               
 ____________________________________________________________________________________________________
-activation_6 (Activation)        (None, None, None, 64 0           batch_normalization_6[0][0]      
+block3_conv1 (Conv2D)            (None, None, None, 25 295168      block2_pool[0][0]                
 ____________________________________________________________________________________________________
-max_pooling2d_5 (MaxPooling2D)   (None, None, None, 64 0           activation_6[0][0]               
+block3_conv2 (Conv2D)            (None, None, None, 25 590080      block3_conv1[0][0]               
 ____________________________________________________________________________________________________
-conv_3 (Conv2D)                  (None, None, None, 12 73856       max_pooling2d_5[0][0]            
+block3_conv3 (Conv2D)            (None, None, None, 25 590080      block3_conv2[0][0]               
 ____________________________________________________________________________________________________
-batch_normalization_7 (BatchNorm (None, None, None, 12 512         conv_3[0][0]                     
+block3_pool (MaxPooling2D)       (None, None, None, 25 0           block3_conv3[0][0]               
 ____________________________________________________________________________________________________
-activation_7 (Activation)        (None, None, None, 12 0           batch_normalization_7[0][0]      
+block4_conv1 (Conv2D)            (None, None, None, 51 1180160     block3_pool[0][0]                
 ____________________________________________________________________________________________________
-max_pooling2d_6 (MaxPooling2D)   (None, None, None, 12 0           activation_7[0][0]               
+block4_conv2 (Conv2D)            (None, None, None, 51 2359808     block4_conv1[0][0]               
 ____________________________________________________________________________________________________
-conv_4 (Conv2D)                  (None, None, None, 25 295168      max_pooling2d_6[0][0]            
+block4_conv3 (Conv2D)            (None, None, None, 51 2359808     block4_conv2[0][0]               
 ____________________________________________________________________________________________________
-batch_normalization_8 (BatchNorm (None, None, None, 25 1024        conv_4[0][0]                     
+block4_conv4 (Conv2D)            (None, None, None, 51 2359808     block4_conv3[0][0]               
 ____________________________________________________________________________________________________
-activation_8 (Activation)        (None, None, None, 25 0           batch_normalization_8[0][0]      
+block4_pool (MaxPooling2D)       (None, None, None, 51 0           block4_conv4[0][0]               
 ____________________________________________________________________________________________________
-conv_fc_1 (Conv2D)               (None, None, None, 20 134219776   activation_8[0][0]               
+conv_fc_1 (Conv2D)               (None, None, None, 40 67112960    block4_pool[0][0]                
 ____________________________________________________________________________________________________
-conv_presence_indicator (Conv2D) (None, None, None, 1) 2049        conv_fc_1[0][0]                  
+conv_presence_indicator (Conv2D) (None, None, None, 1) 4097        conv_fc_1[0][0]                  
 ____________________________________________________________________________________________________
-conv_encoded_chars (Conv2D)      (None, None, None, 28 590112      conv_fc_1[0][0]                  
+conv_encoded_chars (Conv2D)      (None, None, None, 28 1179936     conv_fc_1[0][0]                  
 ====================================================================================================
-Total params: 135,211,137
-Trainable params: 135,210,145
-Non-trainable params: 992
+Total params: 78,290,913
+Trainable params: 78,290,913
+Non-trainable params: 0
 ____________________________________________________________________________________________________
