@@ -11,24 +11,29 @@ import common
 
 def convolutional_layers(img_input):
     # 1 layer
-    x = Conv2D(48, (5, 5), padding='same', name='conv_1')(img_input)
+    x = Conv2D(48, (3, 3), padding='same', name='conv_1')(img_input)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
 
     # 2 layer
-    x = Conv2D(64, (5, 5), padding='same', name='conv_2')(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = MaxPooling2D(pool_size=(2, 1))(x)
-
-    # 3 layer
-    x = Conv2D(128, (5, 5), padding='same', name='conv_3')(x)
+    x = Conv2D(64, (3, 3), padding='same', name='conv_2')(x)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
 
-    # if input size is 128x64, output size will be 8x32x128
+    # 3 layer
+    x = Conv2D(128, (3, 3), padding='same', name='conv_3')(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+
+    # 4 layer
+    x = Conv2D(256, (3, 3), padding='same', name='conv_4')(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+
     return x
 
 def get_training_model():
