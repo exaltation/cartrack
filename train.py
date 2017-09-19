@@ -8,7 +8,7 @@ from keras.callbacks import ModelCheckpoint
 from gen import generate_ims
 import numpy as np
 import itertools
-import make_parallel from multi_gpu
+from multi_gpu import make_parallel
 
 weights_file = 'model_weights_default.h5'
 batch_size = 50
@@ -44,12 +44,12 @@ def read_batches(batch_size):
         yield unzip(gen_vecs())
 
 training_model = models.get_training_model()
-training_model.compile(
+multi_gpu_model = make_parallel(training_model)
+multi_gpu_model.compile(
     loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
     optimizer='adam',
     metrics={'presence_indicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
 
-multi_gpu_model = make_parallel(training_model)
 print('\nStarting training...\n')
 multi_gpu_model.fit_generator(read_batches(batch_size),
     steps_per_epoch=steps_per_epoch,
