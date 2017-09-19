@@ -1,6 +1,6 @@
-import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+# import os
+# os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 import model as models
 import common
@@ -8,9 +8,10 @@ from keras.callbacks import ModelCheckpoint
 from gen import generate_ims
 import numpy as np
 import itertools
+import make_parallel from multi_gpu
 
-weights_file = 'model_weights.h5'
-batch_size = 128
+weights_file = 'model_weights_default.h5'
+batch_size = 50
 
 steps_per_epoch = 200
 num_epochs = 5000
@@ -48,8 +49,9 @@ training_model.compile(
     optimizer='adam',
     metrics={'presence_indicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
 
+multi_gpu_model = make_parallel(training_model)
 print('\nStarting training...\n')
-training_model.fit_generator(read_batches(batch_size),
+multi_gpu_model.fit_generator(read_batches(batch_size),
     steps_per_epoch=steps_per_epoch,
     epochs=num_epochs,
     validation_data=read_batches(batch_size),
