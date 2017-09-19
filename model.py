@@ -7,6 +7,8 @@ from keras.layers import MaxPooling2D
 from keras.layers import Activation
 from keras.layers import BatchNormalization
 
+from multi_gpu import make_parallel
+
 import common
 
 def convolutional_layers(img_input):
@@ -95,12 +97,15 @@ def get_detect_model(trained_weights):
 
     # x = Conv2D(4096, (4, 8), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_1')(x)
 
-    presence_indicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_indicator')(x)
-    encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(x)
+    model = make_parallel(Model(inputs=img_input, outputs=x))
 
-    model = Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
+    presence_indicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_indicator')(model)
+    encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(model)
 
-    return model
+    # model = Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
+
+    # return model
+    return Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
 
 if __name__ == '__main__':
     training_model = get_training_model()
