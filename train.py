@@ -11,7 +11,7 @@ import itertools
 from keras.models import load_model
 
 weights_file = 'model_weights_fc2.h5'
-batch_size = 64
+batch_size = 128
 
 steps_per_epoch = 300
 num_epochs = 5000
@@ -44,6 +44,7 @@ def read_batches(batch_size):
         yield unzip(gen_vecs())
 
 training_model = models.get_training_model()
+training_model.load_weights(weights_file, by_name=True)
 training_model.compile(
     loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
     optimizer='adam',
