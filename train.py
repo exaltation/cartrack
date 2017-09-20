@@ -9,13 +9,14 @@ from gen import generate_ims
 import numpy as np
 import itertools
 from keras.models import load_model
+from multi_gpu import make_parallel
 
-weights_file = 'model_weights_fc2.h5'
+weights_file = 'model_weights_fc2_single_output.h5'
 batch_size = 128
 
 steps_per_epoch = 300
 num_epochs = 5000
-validation_steps = 20
+validation_steps = 3
 
 # def code_to_vec(code):
 #     def char_to_vec(c):
@@ -36,18 +37,18 @@ validation_steps = 20
 
 def code_to_vec(p, code):
     def char_to_vec(c):
-        y = numpy.zeros((len(common.CHARS),))
+        y = np.zeros((len(common.CHARS),))
         y[common.CHARS.index(c)] = 1.0
         return y
 
-    c = numpy.vstack([char_to_vec(c) for c in code])
+    c = np.vstack([char_to_vec(c) for c in code])
 
-    return numpy.concatenate([[1. if p else 0], c.flatten()])
+    return np.concatenate([[1. if p else 0], c.flatten()])
 
 def unzip(b):
     xs, ys = zip(*b)
-    xs = numpy.array(xs)
-    ys = numpy.array(ys)
+    xs = np.array(xs)
+    ys = np.array(ys)
     return xs, ys
 
 def read_batches(batch_size):
@@ -61,10 +62,15 @@ def read_batches(batch_size):
 
 training_model = models.get_training_model()
 training_model.load_weights(weights_file, by_name=True)
+# training_model.compile(
+#     loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
+#     optimizer='adam',
+#     metrics={'presence_indicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
+
 training_model.compile(
-    loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
+    loss='categorical_crossentropy',
     optimizer='adam',
-    metrics={'presence_indicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
+    metrics=['accuracy'])
 
 print('\nStarting training...\n')
 training_model.fit_generator(read_batches(batch_size),
