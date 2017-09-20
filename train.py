@@ -17,28 +17,44 @@ steps_per_epoch = 300
 num_epochs = 5000
 validation_steps = 20
 
-def code_to_vec(code):
+# def code_to_vec(code):
+#     def char_to_vec(c):
+#         y = np.zeros((len(common.CHARS),))
+#         y[common.CHARS.index(c)] = 1.0
+#         return y
+#
+#     c = np.vstack([char_to_vec(c) for c in code])
+#
+#     return c.flatten()
+#
+# def unzip(b):
+#     xs, y1s, y2s = zip(*b)
+#     xs = np.array(xs)
+#     y1s = np.array(y1s)
+#     y2s = np.array(y2s)
+#     return xs, {'presence_indicator':y1s, 'encoded_chars':y2s}
+
+def code_to_vec(p, code):
     def char_to_vec(c):
-        y = np.zeros((len(common.CHARS),))
+        y = numpy.zeros((len(common.CHARS),))
         y[common.CHARS.index(c)] = 1.0
         return y
 
-    c = np.vstack([char_to_vec(c) for c in code])
+    c = numpy.vstack([char_to_vec(c) for c in code])
 
-    return c.flatten()
+    return numpy.concatenate([[1. if p else 0], c.flatten()])
 
 def unzip(b):
-    xs, y1s, y2s = zip(*b)
-    xs = np.array(xs)
-    y1s = np.array(y1s)
-    y2s = np.array(y2s)
-    return xs, {'presence_indicator':y1s, 'encoded_chars':y2s}
+    xs, ys = zip(*b)
+    xs = numpy.array(xs)
+    ys = numpy.array(ys)
+    return xs, ys
 
 def read_batches(batch_size):
     g = generate_ims()
     def gen_vecs():
         for im, c, p in itertools.islice(g, batch_size):
-            yield im.reshape(64, 128, 1), 1. if p else 0, code_to_vec(c)
+            yield im.reshape(64, 128, 1), code_to_vec(p, c)
 
     while True:
         yield unzip(gen_vecs())
