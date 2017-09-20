@@ -72,15 +72,14 @@ def get_training_model():
 
     x = Flatten()(x)
     x = Dense(2048, activation='relu', name='fc_1')(x)
+    x = Dense(2048, activation='relu', name='fc_2')(x)
 
     # x = Flatten(name='flatten')(x)
     # x = Dense(4096, activation='relu', name='fc1')(x)
     # x = Dense(4096, activation='relu', name='fc2')(x)
 
-    model = make_parallel(Model(inputs=img_input, outputs=x))
-
-    presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(model)
-    encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(model)
+    presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
+    encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(x)
 
     return Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
 
@@ -99,10 +98,8 @@ def get_detect_model(trained_weights):
 
     # x = Conv2D(4096, (4, 8), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_1')(x)
 
-    model = make_parallel(Model(inputs=img_input, outputs=x))
-
-    presence_indicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_indicator')(model)
-    encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(model)
+    presence_indicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_indicator')(x)
+    encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(x)
 
     # model = Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
 

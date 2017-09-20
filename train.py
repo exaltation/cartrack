@@ -8,8 +8,9 @@ from keras.callbacks import ModelCheckpoint
 from gen import generate_ims
 import numpy as np
 import itertools
+from keras.models import load_model
 
-weights_file = 'model_weights_default.h5'
+weights_file = 'model_weights_default_parallel.h5'
 batch_size = 50
 
 steps_per_epoch = 200
