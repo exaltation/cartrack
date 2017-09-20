@@ -26,6 +26,7 @@ def convolutional_layers(img_input):
 
     # 3 layer
     x = Conv2D(128, (5, 5), padding='same', name='conv_3')(x)
+    x = Conv2D(128, (3, 3), padding='same', name='conv_4')(x)
     # x = BatchNormalization()(x)
     x = Activation('relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
@@ -95,6 +96,7 @@ def get_detect_model(trained_weights):
     x = convolutional_layers(img_input)
 
     x = Conv2D(2048, (8, 32), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_1')(x)
+    x = Conv2D(2048, (8, 32), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_2')(x)
 
     # x = Conv2D(4096, (4, 8), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_1')(x)
 

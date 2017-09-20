@@ -1,6 +1,6 @@
-# import os
-# os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 import model as models
 import common
@@ -10,10 +10,10 @@ import numpy as np
 import itertools
 from keras.models import load_model
 
-weights_file = 'model_weights_default_parallel.h5'
-batch_size = 50
+weights_file = 'model_weights_fc2.h5'
+batch_size = 64
 
-steps_per_epoch = 200
+steps_per_epoch = 300
 num_epochs = 5000
 validation_steps = 20
 
