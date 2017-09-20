@@ -77,8 +77,10 @@ def get_training_model():
     # x = Dense(4096, activation='relu', name='fc1')(x)
     # x = Dense(4096, activation='relu', name='fc2')(x)
 
-    presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
-    encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(x)
+    model = make_parallel(Model(inputs=img_input, outputs=x))
+
+    presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(model)
+    encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(model)
 
     return Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
 
