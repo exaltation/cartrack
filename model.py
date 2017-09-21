@@ -13,7 +13,7 @@ import common
 
 def convolutional_layers(img_input):
     # 1 layer
-    x = Conv2D(48, (5, 5), padding='same', name='conv_1')(img_input)
+    x = Conv2D(48, (7, 7), padding='same', name='conv_1')(img_input)
     x = Activation('relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
 
@@ -23,7 +23,7 @@ def convolutional_layers(img_input):
     x = MaxPooling2D(pool_size=(2, 1))(x)
 
     # 3 layer
-    x = Conv2D(128, (3, 3), padding='same', name='conv_3')(x)
+    x = Conv2D(128, (5, 5), padding='same', name='conv_3')(x)
     x = Activation('relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
 
@@ -43,7 +43,7 @@ def get_training_model():
     x = convolutional_layers(img_input)
 
     x = Flatten()(x)
-    x = Dense(4096, activation='relu', name='fc_1')(x)
+    x = Dense(2048, activation='relu', name='fc_1')(x)
     x = Dense(2048, activation='relu', name='fc_2')(x)
 
     # presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)

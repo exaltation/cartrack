@@ -11,7 +11,7 @@ import itertools
 from keras.models import load_model
 from multi_gpu import make_parallel
 
-weights_file = 'model_weights_fc2_single_output.h5'
+weights_file = 'model_weights_fc2_single_output_7.h5'
 batch_size = 128
 
 steps_per_epoch = 250
@@ -61,7 +61,7 @@ def read_batches(batch_size):
         yield unzip(gen_vecs())
 
 training_model = models.get_training_model()
-training_model.load_weights(weights_file, by_name=True)
+# training_model.load_weights(weights_file, by_name=True)
 # training_model.compile(
 #     loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
 #     optimizer='adam',
