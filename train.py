@@ -14,9 +14,9 @@ from multi_gpu import make_parallel
 weights_file = 'model_weights_fc2_single_output.h5'
 batch_size = 128
 
-steps_per_epoch = 300
+steps_per_epoch = 250
 num_epochs = 5000
-validation_steps = 3
+validation_steps = 4
 
 # def code_to_vec(code):
 #     def char_to_vec(c):
@@ -76,8 +76,8 @@ print('\nStarting training...\n')
 training_model.fit_generator(read_batches(batch_size),
     steps_per_epoch=steps_per_epoch,
     epochs=num_epochs,
-    validation_data=read_batches(batch_size),
-    validation_steps=validation_steps,
+    # validation_data=read_batches(batch_size),
+    # validation_steps=validation_steps,
     callbacks=[
-        ModelCheckpoint(weights_file)
+        ModelCheckpoint(weights_file, save_best_only=True, monitor='loss')
     ])
