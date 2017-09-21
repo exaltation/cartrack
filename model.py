@@ -43,8 +43,8 @@ def get_training_model():
     x = convolutional_layers(img_input)
 
     x = Flatten()(x)
-    x = Dense(2048, activation='relu', name='fc_1')(x)
-    # x = Dense(2048, activation='relu', name='fc_2')(x)
+    x = Dense(4096, activation='relu', name='fc_1')(x)
+    x = Dense(2048, activation='relu', name='fc_2')(x)
 
     # presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
     # encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(x)
