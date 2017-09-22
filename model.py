@@ -49,14 +49,14 @@ def get_training_model():
     # output = Dense(1 + 8 * len(common.CHARS), activation='softmax', name='chars')(x)
 
     presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
-    char_1 = Dense(8 * len(common.CHARS), activation='softmax', name='char_1')(x)
-    char_2 = Dense(8 * len(common.CHARS), activation='softmax', name='char_2')(x)
-    char_3 = Dense(8 * len(common.CHARS), activation='softmax', name='char_3')(x)
-    char_4 = Dense(8 * len(common.CHARS), activation='softmax', name='char_4')(x)
-    char_5 = Dense(8 * len(common.CHARS), activation='softmax', name='char_5')(x)
-    char_6 = Dense(8 * len(common.CHARS), activation='softmax', name='char_6')(x)
-    char_7 = Dense(8 * len(common.CHARS), activation='softmax', name='char_7')(x)
-    char_8 = Dense(8 * len(common.CHARS), activation='softmax', name='char_8')(x)
+    char_1 = Dense(len(common.CHARS), activation='softmax', name='char_1')(x)
+    char_2 = Dense(len(common.CHARS), activation='softmax', name='char_2')(x)
+    char_3 = Dense(len(common.CHARS), activation='softmax', name='char_3')(x)
+    char_4 = Dense(len(common.CHARS), activation='softmax', name='char_4')(x)
+    char_5 = Dense(len(common.CHARS), activation='softmax', name='char_5')(x)
+    char_6 = Dense(len(common.CHARS), activation='softmax', name='char_6')(x)
+    char_7 = Dense(len(common.CHARS), activation='softmax', name='char_7')(x)
+    char_8 = Dense(len(common.CHARS), activation='softmax', name='char_8')(x)
 
     return Model(inputs=img_input, outputs=[
         presence_indicator,
