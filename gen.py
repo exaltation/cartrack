@@ -137,9 +137,9 @@ def make_affine_transform(from_shape, to_shape,
                            (max_scale - min_scale) * 0.5 * scale_variation)
     if scale > max_scale or scale < min_scale:
         out_of_bounds = True
-    roll = random.uniform(-0.1, 0.1) * rotation_variation
-    pitch = random.uniform(-0.1, 0.1) * rotation_variation
-    yaw = random.uniform(-0.7, 0.7) * rotation_variation
+    roll = random.uniform(-0.3, 0.3) * rotation_variation
+    pitch = random.uniform(-0.2, 0.2) * rotation_variation
+    yaw = random.uniform(-1.2, 1.2) * rotation_variation
 
     # Compute a bounding box on the skewed input image (`from_shape`).
     M = euler_to_mat(yaw, pitch, roll)[:2, :2]
@@ -207,7 +207,7 @@ def rounded_rect(shape, radius):
 
 
 def generate_plate(font_height, char_ims):
-    h_padding = random.uniform(0.1, 0.2) * font_height
+    h_padding = random.uniform(0.2, 0.4) * font_height
     v_padding = random.uniform(0.1, 0.3) * font_height
     spacing = font_height * random.uniform(-0.05, 0.05)
     radius = 1 + int(font_height * 0.1 * random.random())

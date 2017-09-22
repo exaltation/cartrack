@@ -11,7 +11,7 @@ import itertools
 from keras.models import load_model
 from multi_gpu import make_parallel
 
-weights_file = 'model_weights_fc2_single_output_7.h5'
+weights_file = 'model_weights_fc1_7.h5'
 batch_size = 128
 
 steps_per_epoch = 250
@@ -29,8 +29,9 @@ validation_steps = 4
 #     return c.flatten()
 
 def unzip(b):
-    xs, y1s, y2s, y3s, y4s, y5s, y6s, y7s, y8s = zip(*b)
+    xs, y0s, y1s, y2s, y3s, y4s, y5s, y6s, y7s, y8s = zip(*b)
     xs = np.array(xs)
+    y0s = np.array(y0s)
     y1s = np.array(y1s)
     y2s = np.array(y2s)
     y3s = np.array(y3s)
@@ -40,7 +41,7 @@ def unzip(b):
     y7s = np.array(y7s)
     y8s = np.array(y8s)
     return xs, {
-        'presence_indicator': y1s,
+        'presence_indicator': y0s,
         'char_1': y1s,
         'char_2': y2s,
         'char_3': y3s,
@@ -51,16 +52,15 @@ def unzip(b):
         'char_8': y8s,
     }
 
-def code_to_vec(p, code):
+def code_to_vec(code):
     def char_to_vec(c):
         y = np.zeros((len(common.CHARS),))
         y[common.CHARS.index(c)] = 1.0
         return y
 
     c = np.vstack([char_to_vec(c) for c in code])
-    _p = 1. if p else 0
-    
-    return p, c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]
+
+    return c
     # return np.concatenate([[1. if p else 0], c.flatten()])
 
 # def unzip(b):
@@ -73,7 +73,10 @@ def read_batches(batch_size):
     g = generate_ims()
     def gen_vecs():
         for im, c, p in itertools.islice(g, batch_size):
-            yield im.reshape(64, 128, 1), code_to_vec(p, c)
+            _p = 1. if p else 0
+            _c = code_to_vec(c)
+
+            yield im.reshape(64, 128, 1), _p, _c[0], _c[1], _c[2], _c[3], _c[4], _c[5], _c[6], _c[7]
 
     while True:
         yield unzip(gen_vecs())
