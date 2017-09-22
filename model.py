@@ -44,13 +44,31 @@ def get_training_model():
 
     x = Flatten()(x)
     x = Dense(2048, activation='relu', name='fc_1')(x)
-    x = Dense(2048, activation='relu', name='fc_2')(x)
+    # x = Dense(2048, activation='relu', name='fc_2')(x)
 
-    # presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
-    # encoded_chars = Dense(8 * len(common.CHARS), activation='softmax', name='encoded_chars')(x)
-    output = Dense(1 + 8 * len(common.CHARS), activation='softmax', name='chars')(x)
+    # output = Dense(1 + 8 * len(common.CHARS), activation='softmax', name='chars')(x)
 
-    return Model(inputs=img_input, outputs=output)
+    presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
+    char_1 = Dense(8 * len(common.CHARS), activation='softmax', name='char_1')(x)
+    char_2 = Dense(8 * len(common.CHARS), activation='softmax', name='char_2')(x)
+    char_3 = Dense(8 * len(common.CHARS), activation='softmax', name='char_3')(x)
+    char_4 = Dense(8 * len(common.CHARS), activation='softmax', name='char_4')(x)
+    char_5 = Dense(8 * len(common.CHARS), activation='softmax', name='char_5')(x)
+    char_6 = Dense(8 * len(common.CHARS), activation='softmax', name='char_6')(x)
+    char_7 = Dense(8 * len(common.CHARS), activation='softmax', name='char_7')(x)
+    char_8 = Dense(8 * len(common.CHARS), activation='softmax', name='char_8')(x)
+
+    return Model(inputs=img_input, outputs=[
+        presence_indicator,
+        char_1,
+        char_2,
+        char_3,
+        char_4,
+        char_5,
+        char_6,
+        char_7,
+        char_8,
+    ])
 
 def get_detect_model(trained_weights):
     """
@@ -69,7 +87,7 @@ def get_detect_model(trained_weights):
     # x = Conv2D(4096, (4, 8), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_1')(x)
 
     presence_indicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_indicator')(x)
-    encoded_chars = Conv2D(8 * len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(x)
+    encoded_chars = Conv2D(len(common.CHARS), (1, 1), activation='softmax', name='conv_encoded_chars')(x)
 
     # model = Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
 

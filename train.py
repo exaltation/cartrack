@@ -27,13 +27,29 @@ validation_steps = 4
 #     c = np.vstack([char_to_vec(c) for c in code])
 #
 #     return c.flatten()
-#
-# def unzip(b):
-#     xs, y1s, y2s = zip(*b)
-#     xs = np.array(xs)
-#     y1s = np.array(y1s)
-#     y2s = np.array(y2s)
-#     return xs, {'presence_indicator':y1s, 'encoded_chars':y2s}
+
+def unzip(b):
+    xs, y1s, y2s, y3s, y4s, y5s, y6s, y7s, y8s = zip(*b)
+    xs = np.array(xs)
+    y1s = np.array(y1s)
+    y2s = np.array(y2s)
+    y3s = np.array(y3s)
+    y4s = np.array(y4s)
+    y5s = np.array(y5s)
+    y6s = np.array(y6s)
+    y7s = np.array(y7s)
+    y8s = np.array(y8s)
+    return xs, {
+        'presence_indicator': y1s,
+        'char_1': y1s,
+        'char_2': y2s,
+        'char_3': y3s,
+        'char_4': y4s,
+        'char_5': y5s,
+        'char_6': y6s,
+        'char_7': y7s,
+        'char_8': y8s,
+    }
 
 def code_to_vec(p, code):
     def char_to_vec(c):
@@ -42,14 +58,16 @@ def code_to_vec(p, code):
         return y
 
     c = np.vstack([char_to_vec(c) for c in code])
+    _p = 1. if p else 0
+    
+    return p, c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]
+    # return np.concatenate([[1. if p else 0], c.flatten()])
 
-    return np.concatenate([[1. if p else 0], c.flatten()])
-
-def unzip(b):
-    xs, ys = zip(*b)
-    xs = np.array(xs)
-    ys = np.array(ys)
-    return xs, ys
+# def unzip(b):
+#     xs, ys = zip(*b)
+#     xs = np.array(xs)
+#     ys = np.array(ys)
+#     return xs, ys
 
 def read_batches(batch_size):
     g = generate_ims()
@@ -62,15 +80,35 @@ def read_batches(batch_size):
 
 training_model = models.get_training_model()
 # training_model.load_weights(weights_file, by_name=True)
-# training_model.compile(
-#     loss={'presence_indicator':'binary_crossentropy', 'encoded_chars':'categorical_crossentropy'},
-#     optimizer='adam',
-#     metrics={'presence_indicator':'binary_accuracy', 'encoded_chars':'categorical_accuracy'})
-
 training_model.compile(
-    loss='categorical_crossentropy',
+    loss={
+        'presence_indicator':'binary_crossentropy',
+        'char_1':'categorical_crossentropy',
+        'char_2':'categorical_crossentropy',
+        'char_3':'categorical_crossentropy',
+        'char_4':'categorical_crossentropy',
+        'char_5':'categorical_crossentropy',
+        'char_6':'categorical_crossentropy',
+        'char_7':'categorical_crossentropy',
+        'char_8':'categorical_crossentropy',
+    },
     optimizer='adam',
-    metrics=['accuracy'])
+    metrics={
+        'presence_indicator':'binary_accuracy',
+        'char_1':'categorical_accuracy',
+        'char_2':'categorical_accuracy',
+        'char_3':'categorical_accuracy',
+        'char_4':'categorical_accuracy',
+        'char_5':'categorical_accuracy',
+        'char_6':'categorical_accuracy',
+        'char_7':'categorical_accuracy',
+        'char_8':'categorical_accuracy',
+    })
+
+# training_model.compile(
+#     loss='categorical_crossentropy',
+#     optimizer='adam',
+#     metrics=['accuracy'])
 
 print('\nStarting training...\n')
 training_model.fit_generator(read_batches(batch_size),
