@@ -67,7 +67,7 @@ def get_training_model():
         char_8,
     ])
 
-def get_detect_model(trained_weights):
+def get_detect_model(trained_weights=False):
     """
     The same as training model, except it acts on arbitary sized image and
     slides the 128x64 window across the image in 8x8 strides
@@ -101,7 +101,8 @@ def get_detect_model(trained_weights):
         char_7,
         char_8,
     ])
-    m.load_weights(trained_weights, by_name=True)
+    if trained_weights != False:
+        m.load_weights(trained_weights, by_name=True)
 
     return m
 
