@@ -79,7 +79,7 @@ training_model.compile(
         'char_7':'categorical_crossentropy',
         'char_8':'categorical_crossentropy',
     },
-    optimizer='adadelta',
+    optimizer='adamax',
     metrics={
         'presence_indicator':'binary_accuracy',
         'char_1':'categorical_accuracy',
@@ -99,5 +99,5 @@ training_model.fit_generator(read_batches(batch_size),
     verbose=1,
     callbacks=[
         ModelCheckpoint(weights_file, save_best_only=True, monitor='loss'),
-        ReduceLROnPlateau(monitor='loss', factor=0.5, epsilon=1e-6, cooldown=5, min_lr=5e-5)
+        ReduceLROnPlateau(monitor='loss', factor=0.5, epsilon=1e-6, min_lr=5e-5)
     ])
