@@ -16,17 +16,6 @@ batch_size = 128
 
 steps_per_epoch = 250
 num_epochs = 500
-validation_steps = 4
-
-# def code_to_vec(code):
-#     def char_to_vec(c):
-#         y = np.zeros((len(common.CHARS),))
-#         y[common.CHARS.index(c)] = 1.0
-#         return y
-#
-#     c = np.vstack([char_to_vec(c) for c in code])
-#
-#     return c.flatten()
 
 def unzip(b):
     xs, y0s, y1s, y2s, y3s, y4s, y5s, y6s, y7s, y8s = zip(*b)
@@ -61,13 +50,7 @@ def code_to_vec(code):
     c = np.vstack([char_to_vec(c) for c in code])
 
     return c
-    # return np.concatenate([[1. if p else 0], c.flatten()])
 
-# def unzip(b):
-#     xs, ys = zip(*b)
-#     xs = np.array(xs)
-#     ys = np.array(ys)
-#     return xs, ys
 
 def read_batches(batch_size):
     g = generate_ims()
@@ -83,6 +66,7 @@ def read_batches(batch_size):
 
 training_model = models.get_training_model()
 training_model.load_weights(weights_file, by_name=True)
+
 training_model.compile(
     loss={
         'presence_indicator':'binary_crossentropy',
@@ -108,18 +92,11 @@ training_model.compile(
         'char_8':'categorical_accuracy',
     })
 
-# training_model.compile(
-#     loss='categorical_crossentropy',
-#     optimizer='adam',
-#     metrics=['accuracy'])
-
 print('\nStarting training...\n')
 training_model.fit_generator(read_batches(batch_size),
     steps_per_epoch=steps_per_epoch,
     epochs=num_epochs,
     verbose=1,
-    # validation_data=read_batches(batch_size),
-    # validation_steps=validation_steps,
     callbacks=[
         ModelCheckpoint(weights_file, save_best_only=True, monitor='loss'),
         ReduceLROnPlateau(monitor='loss', factor=0.5, epsilon=1e-6, cooldown=5, min_lr=5e-5)
