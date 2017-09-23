@@ -66,7 +66,7 @@ def make_char_ims(font_path, output_height):
 
     for c in CHARS:
         if c == '+':
-            width = int(font.getsize('I')[0]*0.5)
+            width = int(font.getsize('I')[0]*0.88)
             im = Image.new("RGBA", (width, height), (0, 0, 0))
             center = int(width / 2)
             draw = ImageDraw.Draw(im)
@@ -78,7 +78,7 @@ def make_char_ims(font_path, output_height):
 
         width = font.getsize(c)[0]
         if c == ' ':
-            width = int(width*0.4)
+            width = int(width*0.44)
         im = Image.new("RGBA", (width, height), (0, 0, 0))
 
         draw = ImageDraw.Draw(im)
