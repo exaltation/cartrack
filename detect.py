@@ -3,6 +3,7 @@ from common import CHARS
 import numpy as np
 import cv2
 import sys
+import collections
 
 weights_file = 'model_weights_fc1_7.h5'
 WINDOW_SHAPE = (64, 128)
@@ -14,49 +15,33 @@ def make_scaled_ims(im, min_shape):
     while True:
         i += 1
         shape = (int(shape[0] * ratio), int(shape[1] * ratio))
-        if shape[0] < min_shape[0] or shape[1] < min_shape[1] or i > 5:
+        if shape[0] < min_shape[0] or shape[1] < min_shape[1]:
             break
         yield cv2.resize(im, (shape[1], shape[0]))
 
 def detect(image):
-    # print(image.shape)
-    # im = image.reshape(1, image.shape[0], image.shape[1], 1)
-    scaled_ims = list(make_scaled_ims(image, (64, 128)))
-    print(scaled_ims[0].shape)
-    print(scaled_ims[1].shape)
-    print(scaled_ims[2].shape)
-    sys.exit(0)
-
     detect_model = get_detect_model(weights_file)
-    scaled_ims = list(make_scaled_ims(im, WINDOW_SHAPE))
+    scaled_ims = list(make_scaled_ims(image, WINDOW_SHAPE))
     y_vals = []
     for scaled_im in scaled_ims:
         val = detect_model.predict(scaled_im.reshape(1, scaled_im.shape[0], scaled_im.shape[1], 1), batch_size=1)
         y_vals.append(val)
 
-    # y_val = detect_model.predict(im, batch_size=1)
-    # print(len(y_val))
-    # print(y_val[0].shape)
-    # print(y_val[0][0][15][21][0])
-    # print(y_val[1].shape)
-    # print(y_val[2].shape)
-    # print(y_val[3].shape)
-
-    for i, (scaled_im, y_val) in enumerate(scaled_ims, y_vals):
-        for window_coords in np.argwhere(y_val[0][0, :, :, 0] > 0.7):
+    for scaled_im, y_val in zip(scaled_ims, y_vals):
+        for window_coords in np.argwhere(y_val[0][0, :, :, 0] > 0.5):
             letter_probs = np.array([
-                y_val[1][0, window_coords[0], window_coords[1], :]
-                y_val[2][0, window_coords[0], window_coords[1], :]
-                y_val[3][0, window_coords[0], window_coords[1], :]
-                y_val[4][0, window_coords[0], window_coords[1], :]
-                y_val[5][0, window_coords[0], window_coords[1], :]
-                y_val[6][0, window_coords[0], window_coords[1], :]
-                y_val[7][0, window_coords[0], window_coords[1], :]
-                y_val[8][0, window_coords[0], window_coords[1], :]
+                y_val[1][0, window_coords[0], window_coords[1], :],
+                y_val[2][0, window_coords[0], window_coords[1], :],
+                y_val[3][0, window_coords[0], window_coords[1], :],
+                y_val[4][0, window_coords[0], window_coords[1], :],
+                y_val[5][0, window_coords[0], window_coords[1], :],
+                y_val[6][0, window_coords[0], window_coords[1], :],
+                y_val[7][0, window_coords[0], window_coords[1], :],
+                y_val[8][0, window_coords[0], window_coords[1], :],
             ])
 
             present_prob = y_val[0][0][window_coords[0]][window_coords[1]][0]
-
+            print(present_prob)
             img_scale = float(image.shape[0]) / scaled_im.shape[0]
             bbox_tl = window_coords * (16, 8) * img_scale
             bbox_size = np.array(WINDOW_SHAPE) * img_scale
@@ -124,8 +109,8 @@ if __name__ == '__main__':
     im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY) / 255.
 
     for pt1, pt2, present_prob, letter_probs in post_process(detect(im_gray)):
-        pt1 = tuple(reversed(map(int, pt1)))
-        pt2 = tuple(reversed(map(int, pt2)))
+        pt1 = tuple([int(pt1[1]), int(pt1[0])])
+        pt2 = tuple([int(pt2[1]), int(pt2[0])])
 
         code = letter_probs_to_code(letter_probs)
 
