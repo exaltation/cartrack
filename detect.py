@@ -1,3 +1,7 @@
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 from model import get_detect_model
 from common import CHARS
 import numpy as np
@@ -7,6 +11,10 @@ import collections
 
 weights_file = 'model_weights_fc1_7.h5'
 WINDOW_SHAPE = (64, 128)
+
+def letter_probs_to_code(letter_probs):
+    return "".join(CHARS[i] for i in np.argmax(letter_probs, axis=1))
+
 
 def make_scaled_ims(im, min_shape):
     ratio = 1. / 2 ** 0.5
@@ -29,6 +37,15 @@ def detect(image):
 
     for scaled_im, y_val in zip(scaled_ims, y_vals):
         for window_coords in np.argwhere(y_val[0][0, :, :, 0] > 0.5):
+            if (np.max(y_val[1][0, window_coords[0], window_coords[1], :]) < 0.4 or
+                np.max(y_val[2][0, window_coords[0], window_coords[1], :]) < 0.4 or
+                np.max(y_val[3][0, window_coords[0], window_coords[1], :]) < 0.4 or
+                np.max(y_val[4][0, window_coords[0], window_coords[1], :]) < 0.4 or
+                np.max(y_val[5][0, window_coords[0], window_coords[1], :]) < 0.4 or
+                np.max(y_val[6][0, window_coords[0], window_coords[1], :]) < 0.4 or
+                np.max(y_val[7][0, window_coords[0], window_coords[1], :]) < 0.4 or
+                np.max(y_val[8][0, window_coords[0], window_coords[1], :]) < 0.4):
+                continue
             letter_probs = np.array([
                 y_val[1][0, window_coords[0], window_coords[1], :],
                 y_val[2][0, window_coords[0], window_coords[1], :],
@@ -42,6 +59,7 @@ def detect(image):
 
             present_prob = y_val[0][0][window_coords[0]][window_coords[1]][0]
             print(present_prob)
+            print(letter_probs_to_code(letter_probs))
             img_scale = float(image.shape[0]) / scaled_im.shape[0]
             bbox_tl = window_coords * (16, 8) * img_scale
             bbox_size = np.array(WINDOW_SHAPE) * img_scale
@@ -100,9 +118,6 @@ def post_process(matches):
                np.min(maxs, axis=0).flatten(),
                np.max(present_probs),
                letter_probs[np.argmax(present_probs)])
-
-def letter_probs_to_code(letter_probs):
-    return "".join(CHARS[i] for i in np.argmax(letter_probs, axis=1))
 
 if __name__ == '__main__':
     im = cv2.imread(sys.argv[1])

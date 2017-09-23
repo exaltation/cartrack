@@ -79,7 +79,7 @@ training_model.compile(
         'char_7':'categorical_crossentropy',
         'char_8':'categorical_crossentropy',
     },
-    optimizer='adamax',
+    optimizer='adadelta',
     metrics={
         'presence_indicator':'binary_accuracy',
         'char_1':'categorical_accuracy',
