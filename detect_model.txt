@@ -1,33 +1,33 @@
 ____________________________________________________________________________________________________
 Layer (type)                     Output Shape          Param #     Connected to                     
 ====================================================================================================
-input_2 (InputLayer)             (None, None, None, 1) 0                                            
+input_1 (InputLayer)             (None, None, None, 1) 0                                            
 ____________________________________________________________________________________________________
-conv_1 (Conv2D)                  (None, None, None, 48 2400        input_2[0][0]                    
+conv_1 (Conv2D)                  (None, None, None, 48 2400        input_1[0][0]                    
 ____________________________________________________________________________________________________
-activation_5 (Activation)        (None, None, None, 48 0           conv_1[0][0]                     
+activation_1 (Activation)        (None, None, None, 48 0           conv_1[0][0]                     
 ____________________________________________________________________________________________________
-max_pooling2d_5 (MaxPooling2D)   (None, None, None, 48 0           activation_5[0][0]               
+max_pooling2d_1 (MaxPooling2D)   (None, None, None, 48 0           activation_1[0][0]               
 ____________________________________________________________________________________________________
-conv_2 (Conv2D)                  (None, None, None, 64 76864       max_pooling2d_5[0][0]            
+conv_2 (Conv2D)                  (None, None, None, 64 76864       max_pooling2d_1[0][0]            
 ____________________________________________________________________________________________________
-activation_6 (Activation)        (None, None, None, 64 0           conv_2[0][0]                     
+activation_2 (Activation)        (None, None, None, 64 0           conv_2[0][0]                     
 ____________________________________________________________________________________________________
-max_pooling2d_6 (MaxPooling2D)   (None, None, None, 64 0           activation_6[0][0]               
+max_pooling2d_2 (MaxPooling2D)   (None, None, None, 64 0           activation_2[0][0]               
 ____________________________________________________________________________________________________
-conv_3 (Conv2D)                  (None, None, None, 12 204928      max_pooling2d_6[0][0]            
+conv_3 (Conv2D)                  (None, None, None, 12 204928      max_pooling2d_2[0][0]            
 ____________________________________________________________________________________________________
-activation_7 (Activation)        (None, None, None, 12 0           conv_3[0][0]                     
+activation_3 (Activation)        (None, None, None, 12 0           conv_3[0][0]                     
 ____________________________________________________________________________________________________
-max_pooling2d_7 (MaxPooling2D)   (None, None, None, 12 0           activation_7[0][0]               
+max_pooling2d_3 (MaxPooling2D)   (None, None, None, 12 0           activation_3[0][0]               
 ____________________________________________________________________________________________________
-conv_4 (Conv2D)                  (None, None, None, 25 295168      max_pooling2d_7[0][0]            
+conv_4 (Conv2D)                  (None, None, None, 25 295168      max_pooling2d_3[0][0]            
 ____________________________________________________________________________________________________
-activation_8 (Activation)        (None, None, None, 25 0           conv_4[0][0]                     
+activation_4 (Activation)        (None, None, None, 25 0           conv_4[0][0]                     
 ____________________________________________________________________________________________________
-max_pooling2d_8 (MaxPooling2D)   (None, None, None, 25 0           activation_8[0][0]               
+max_pooling2d_4 (MaxPooling2D)   (None, None, None, 25 0           activation_4[0][0]               
 ____________________________________________________________________________________________________
-conv_fc_1 (Conv2D)               (None, None, None, 20 33556480    max_pooling2d_8[0][0]            
+conv_fc_1 (Conv2D)               (None, None, None, 20 33556480    max_pooling2d_4[0][0]            
 ____________________________________________________________________________________________________
 conv_presence_indicator (Conv2D) (None, None, None, 1) 2049        conv_fc_1[0][0]                  
 ____________________________________________________________________________________________________

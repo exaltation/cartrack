@@ -1,4 +1,4 @@
-from keras.models import Model
+from keras.models import Model, load_model
 from keras.layers import Input
 from keras.layers import Dense
 from keras.layers import Flatten
@@ -70,10 +70,9 @@ def get_training_model():
 def get_detect_model(trained_weights=False):
     """
     The same as training model, except it acts on arbitary sized image and
-    slides the 128x64 window across the image in 8x8 strides
+    slides the 128x64 window across the image
 
-    not usable!
-    TODO: restructurize model and load trained weights!!!
+    TODO: load trained weights
     """
     img_input = Input(shape=(None, None, 1))
     x = convolutional_layers(img_input)
@@ -103,6 +102,10 @@ def get_detect_model(trained_weights=False):
     ])
     if trained_weights != False:
         m.load_weights(trained_weights, by_name=True)
+
+        # trained_model = load_model(trained_weights)
+        # fc_1 = trained_model.get_layer('fc_1').get_weights()
+        # print(fc_1.shape)
 
     return m
 
