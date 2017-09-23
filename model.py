@@ -7,7 +7,7 @@ from keras.layers import MaxPooling2D
 from keras.layers import Activation
 from keras.layers import BatchNormalization
 
-from multi_gpu import make_parallel
+import numpy as np
 
 import common
 
@@ -103,9 +103,28 @@ def get_detect_model(trained_weights=False):
     if trained_weights != False:
         m.load_weights(trained_weights, by_name=True)
 
-        # trained_model = load_model(trained_weights)
-        # fc_1 = trained_model.get_layer('fc_1').get_weights()
-        # print(fc_1.shape)
+        trained_model = load_model(trained_weights)
+        fc_1 = trained_model.get_layer('fc_1').get_weights()
+        presence_indicator = trained_model.get_layer('presence_indicator').get_weights()
+        char_1 = trained_model.get_layer('char_1').get_weights()
+        char_2 = trained_model.get_layer('char_2').get_weights()
+        char_3 = trained_model.get_layer('char_3').get_weights()
+        char_4 = trained_model.get_layer('char_4').get_weights()
+        char_5 = trained_model.get_layer('char_5').get_weights()
+        char_6 = trained_model.get_layer('char_6').get_weights()
+        char_7 = trained_model.get_layer('char_7').get_weights()
+        char_8 = trained_model.get_layer('char_8').get_weights()
+
+        m.layers[13].set_weights([np.reshape(fc_1[0], m.get_layer('conv_fc_1').get_weights()[0].shape), fc_1[1]])
+        m.layers[14].set_weights([np.reshape(presence_indicator[0], m.get_layer('conv_presence_indicator').get_weights()[0].shape), presence_indicator[1]])
+        m.layers[15].set_weights([np.reshape(char_1[0], m.get_layer('conv_char_1').get_weights()[0].shape), char_1[1]])
+        m.layers[16].set_weights([np.reshape(char_2[0], m.get_layer('conv_char_2').get_weights()[0].shape), char_2[1]])
+        m.layers[17].set_weights([np.reshape(char_3[0], m.get_layer('conv_char_3').get_weights()[0].shape), char_3[1]])
+        m.layers[18].set_weights([np.reshape(char_4[0], m.get_layer('conv_char_4').get_weights()[0].shape), char_4[1]])
+        m.layers[19].set_weights([np.reshape(char_5[0], m.get_layer('conv_char_5').get_weights()[0].shape), char_5[1]])
+        m.layers[20].set_weights([np.reshape(char_6[0], m.get_layer('conv_char_6').get_weights()[0].shape), char_6[1]])
+        m.layers[21].set_weights([np.reshape(char_7[0], m.get_layer('conv_char_7').get_weights()[0].shape), char_7[1]])
+        m.layers[22].set_weights([np.reshape(char_8[0], m.get_layer('conv_char_8').get_weights()[0].shape), char_8[1]])
 
     return m
 
