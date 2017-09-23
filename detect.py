@@ -112,12 +112,12 @@ def post_process(matches):
         mins = np.stack(np.array(m[0]) for m in group_matches)
         maxs = np.stack(np.array(m[1]) for m in group_matches)
         present_probs = np.array([m[2] for m in group_matches])
-        letter_probs = np.stack(m[3] for m in group_matches)
+        letter_probs = [letter_probs_to_code(m[3]) for m in group_matches]
 
         yield (np.max(mins, axis=0).flatten(),
                np.min(maxs, axis=0).flatten(),
                np.max(present_probs),
-               letter_probs[np.argmax(present_probs)])
+               letter_probs)
 
 if __name__ == '__main__':
     im = cv2.imread(sys.argv[1])
@@ -127,7 +127,7 @@ if __name__ == '__main__':
         pt1 = tuple([int(pt1[1]), int(pt1[0])])
         pt2 = tuple([int(pt2[1]), int(pt2[0])])
 
-        code = letter_probs_to_code(letter_probs)
+        code, _ = collections.Counter(letter_probs).most_common(1)[0]
 
         color = (0.0, 255.0, 0.0)
         cv2.rectangle(im, pt1, pt2, color)
