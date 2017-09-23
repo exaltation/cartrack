@@ -9,19 +9,21 @@ weights_file = 'model_weights_fc1_7.h5'
 def make_scaled_ims(im, min_shape):
     ratio = 1. / 2 ** 0.5
     shape = (im.shape[0] / ratio, im.shape[1] / ratio)
-
+    i = 0
     while True:
+        i += 1
         shape = (int(shape[0] * ratio), int(shape[1] * ratio))
-        if shape[0] < min_shape[0] or shape[1] < min_shape[1]:
+        if shape[0] < min_shape[0] or shape[1] < min_shape[1] or i > 5:
             break
         yield cv2.resize(im, (shape[1], shape[0]))
 
 def detect(image):
     # print(image.shape)
     # im = image.reshape(1, image.shape[0], image.shape[1], 1)
-    scaled_ims = list(make_scaled_ims(im, (64, 128)))
-    print(len(scaled_ims))
+    scaled_ims = list(make_scaled_ims(image, (64, 128)))
     print(scaled_ims[0].shape)
+    print(scaled_ims[1].shape)
+    print(scaled_ims[2].shape)
     sys.exit(0)
 
     detect_model = get_detect_model(weights_file)
