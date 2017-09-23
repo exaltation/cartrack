@@ -70,7 +70,7 @@ def get_training_model():
 def get_detect_model(trained_weights=False):
     """
     The same as training model, except it acts on arbitary sized image and
-    slides the 128x64 window across the image
+    slides the 128x64 window across the image with strides 16x8
 
     TODO: load trained weights
     """
