@@ -4,7 +4,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 import model as models
 import common
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from gen import generate_ims
 import numpy as np
 import itertools
@@ -15,7 +15,7 @@ weights_file = 'model_weights_fc1_7.h5'
 batch_size = 128
 
 steps_per_epoch = 250
-num_epochs = 5000
+num_epochs = 500
 validation_steps = 4
 
 # def code_to_vec(code):
@@ -82,7 +82,7 @@ def read_batches(batch_size):
         yield unzip(gen_vecs())
 
 training_model = models.get_training_model()
-# training_model.load_weights(weights_file, by_name=True)
+training_model.load_weights(weights_file, by_name=True)
 training_model.compile(
     loss={
         'presence_indicator':'binary_crossentropy',
@@ -95,7 +95,7 @@ training_model.compile(
         'char_7':'categorical_crossentropy',
         'char_8':'categorical_crossentropy',
     },
-    optimizer='adam',
+    optimizer='adamax',
     metrics={
         'presence_indicator':'binary_accuracy',
         'char_1':'categorical_accuracy',
@@ -117,8 +117,10 @@ print('\nStarting training...\n')
 training_model.fit_generator(read_batches(batch_size),
     steps_per_epoch=steps_per_epoch,
     epochs=num_epochs,
+    verbose=1,
     # validation_data=read_batches(batch_size),
     # validation_steps=validation_steps,
     callbacks=[
-        ModelCheckpoint(weights_file, save_best_only=True, monitor='loss')
+        ModelCheckpoint(weights_file, save_best_only=True, monitor='loss'),
+        ReduceLROnPlateau(monitor='loss', factor=0.5, epsilon=1e-6, cooldown=5, min_lr=5e-5)
     ])
