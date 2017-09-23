@@ -44,9 +44,6 @@ def get_training_model():
 
     x = Flatten()(x)
     x = Dense(2048, activation='relu', name='fc_1')(x)
-    # x = Dense(2048, activation='relu', name='fc_2')(x)
-
-    # output = Dense(1 + 8 * len(common.CHARS), activation='softmax', name='chars')(x)
 
     presence_indicator = Dense(1, activation='sigmoid', name='presence_indicator')(x)
     char_1 = Dense(len(common.CHARS), activation='softmax', name='char_1')(x)
@@ -82,9 +79,6 @@ def get_detect_model(trained_weights):
     x = convolutional_layers(img_input)
 
     x = Conv2D(2048, (4, 16), activation='relu', name='conv_fc_1')(x)
-    # x = Conv2D(2048, (8, 32), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_2')(x)
-
-    # x = Conv2D(4096, (4, 8), padding="valid", strides=(1, 1), activation='relu', name='conv_fc_1')(x)
 
     presence_indicator = Conv2D(1, (1, 1), activation='sigmoid', name='conv_presence_indicator')(x)
     char_1 = Conv2D(len(common.CHARS), (1, 1), activation='softmax', name='conv_char_1')(x)
@@ -96,10 +90,7 @@ def get_detect_model(trained_weights):
     char_7 = Conv2D(len(common.CHARS), (1, 1), activation='softmax', name='conv_char_7')(x)
     char_8 = Conv2D(len(common.CHARS), (1, 1), activation='softmax', name='conv_char_8')(x)
 
-    # model = Model(inputs=img_input, outputs=[presence_indicator, encoded_chars])
-
-    # return model
-    return Model(inputs=img_input, outputs=[
+    m = Model(inputs=img_input, outputs=[
         presence_indicator,
         char_1,
         char_2,
@@ -110,6 +101,9 @@ def get_detect_model(trained_weights):
         char_7,
         char_8,
     ])
+    m.load_weights(trained_weights, by_name=True)
+
+    return m
 
 if __name__ == '__main__':
     training_model = get_training_model()
